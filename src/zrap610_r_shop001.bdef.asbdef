@@ -1,0 +1,73 @@
+managed implementation in class ZRAP610_BP_R_SHOP001 unique;
+strict ( 2 );
+with draft;
+
+define behavior for ZRAP610_R_SHOP001 alias Onlineshop
+//persistent table zrap610shop001
+draft table zrap610shop001_d
+etag master LocalLastChangedAt
+lock master total etag LastChangedAt
+authorization master ( global )
+with unmanaged save
+{
+  field ( readonly )
+  OrderUUID,
+  CreatedAt,
+  CreatedBy,
+  LastChangedAt,
+  LastChangedBy,
+  LocalLastChangedAt;
+
+  field ( numbering : managed )
+  OrderUUID;
+
+
+  create;
+  update;
+  delete;
+
+  draft action Edit;
+  draft action Activate optimized;
+  draft action Discard;
+  draft action Resume;
+
+  determination setInitialOrderValues on modify { create; }
+  determination updateProductDetails on modify { field OrderItemID; }
+  determination calculateTotalPrice on modify { create; field OrderItemID; field OrderItemQuantity; }
+
+  validation checkOrderedItem on save { create; field OrderItemID; }
+  validation checkOrderedQuantity on save { create; field OrderItemQuantity; }
+  validation checkDeliveryDate on save { create; field DeliveryDate; }
+
+  //  draft determine action Prepare;
+  draft determine action Prepare
+  {
+    validation checkOrderedItem;
+    validation checkOrderedQuantity;
+    validation checkDeliveryDate;
+  }
+
+  action createPurchaseRequisition result [1] $self;
+
+  mapping for zrap610shop001 control zrap610_onlineshop_x_001 corresponding
+    {
+      OrderUUID              = order_uuid;
+      OrderID                = order_id;
+      OrderItemID            = order_item_id;
+      OrderItemPrice         = order_item_price;
+      OrderItemQuantity      = order_item_quantity;
+      TotalPrice             = total_price;
+      Currency               = currency;
+      OverallStatus          = overall_status;
+      OverallStatusIndicator = overall_status_indicator;
+      DeliveryDate           = delivery_date;
+      Notes                  = notes;
+      PurchaseRequisition    = purchase_requisition;
+      PurchRqnCreationDate   = purch_rqn_creation_date;
+      CreatedBy              = created_by;
+      CreatedAt              = created_at;
+      LastChangedBy          = last_changed_by;
+      LastChangedAt          = last_changed_at;
+      LocalLastChangedAt     = local_last_changed_at;
+    }
+}

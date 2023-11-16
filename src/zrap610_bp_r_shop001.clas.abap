@@ -1,0 +1,16 @@
+CLASS zrap610_bp_r_shop001 DEFINITION
+  PUBLIC
+  ABSTRACT
+  FINAL
+  FOR BEHAVIOR OF zrap610_r_shop001 .
+
+  PUBLIC SECTION.
+      CLASS-DATA mapped_purchase_requisition TYPE RESPONSE FOR MAPPED i_purchaserequisitiontp.
+  PROTECTED SECTION.
+  PRIVATE SECTION.
+ENDCLASS.
+
+
+
+CLASS zrap610_bp_r_shop001 IMPLEMENTATION.
+ENDCLASS.

@@ -1,0 +1,4 @@
+@EndUserText.label: 'Service definition for ZRAP610_C_SHOP001'
+define service ZRAP610_UI_SHOP001_V4 {
+  expose ZRAP610_C_SHOP001 as Onlineshop;
+}
